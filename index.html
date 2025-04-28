@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>IoT Light Scheduler</title>
+  <style>
+    body { 
+      font-family: Arial, sans-serif; 
+      padding: 40px; 
+      background-color: #f0f0f0; 
+      display: flex; 
+      justify-content: center; 
+      align-items: center; 
+      height: 100vh; 
+      margin: 0; 
+    }
+    .card {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      width: 300px;
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+    label {
+      margin-top: 10px;
+      display: block;
+      color: #555;
+    }
+    input, button { 
+      padding: 10px; 
+      margin: 10px 0; 
+      display: block; 
+      width: 100%; 
+      border: 1px solid #ccc; 
+      border-radius: 4px; 
+    }
+    button { 
+      background-color: #4CAF50; 
+      color: white; 
+      border: none; 
+      cursor: pointer; 
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Light Scheduler</h2>
+    <form id="scheduleForm">
+      <label for="onTime">ON Time (24h format, eg. 18:00)</label>
+      <input type="time" id="onTime" required>
+      
+      <label for="offTime">OFF Time (24h format, eg. 23:00)</label>
+      <input type="time" id="offTime" required>
+
+      <button type="submit">Submit Schedule</button>
+    </form>
+  </div>
+
+  <script>
+    const ws = new WebSocket('ws://localhost:8765');
+
+    document.getElementById('scheduleForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const onTime = document.getElementById('onTime').value;
+      const offTime = document.getElementById('offTime').value;
+      const schedule = { on: onTime, off: offTime };
+      ws.send(JSON.stringify(schedule));
+      alert('Schedule sent!');
+    });
+  </script>
+</body>
+</html>
