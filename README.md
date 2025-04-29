@@ -14,8 +14,15 @@ This project simulates a real-world IoT dashboard that schedules a light ON/OFF 
 - mosquitto_pub / mosquitto_sub
 - Arduino UNO
 
-## How to Run
+System Workflow
+User inputs ON/OFF time on the browser UI and clicks submit.
 
-1. **Start Mosquitto Broker**  
-```bash
-sudo systemctl start mosquitto
+Data is sent via WebSocket to a Python server.
+
+The server relays the data to MQTT broker using mosquitto_pub.
+
+A Python MQTT subscriber listens, processes the schedule, and sends '1' (ON) or '0' (OFF) via serial to Arduino.
+
+The Arduino receives the signal and triggers the relay accordingly.
+
+
